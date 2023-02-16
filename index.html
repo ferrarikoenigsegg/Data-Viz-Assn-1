@@ -1,167 +1,76 @@
-<head>
-  <title>Assignment 1</title>
-  <style>
-      td {
-          padding: 10px;
-          text-align: center;
-      }
-      table {
-          background: #303030;
-          border-collapse: collapse;
-        }
-        th, td {
-        border: 1px solid #606060;
-        padding: 8px;
-      }
-  
-      html, body {
-          color: white;
-          height: 100%;
-          background: #606060;
-      }
-  
-      body {
-          display: flex;
-          flex-direction: column;
-  
-          justify-content: center;
-      }
-  
-      h2, h4 {
-          text-align: center;
-      }
-  
-      h2 {
-          font-size: 36px;
-          margin-bottom: 0;
-      }
-  
-  
-  </style>
-  </head>
-  
-  <body cz-shortcut-listen="true">
 
-    <h2>Pollutant Standards Index (PSI)</h2>
-    <h4>Data updated at: <span id="timestring">2023-02-03T10:08:52+08:00</span></h4>
-    <table id="PSItable">
-        <tbody><tr>
-            <th>Metric</th>
-            <th>West</th>
-            <th>National</th>
-            <th>East</th>
-            <th>Central</th>
-            <th>South</th>
-            <th>North</th>
-        </tr>
-    </tbody>
-        <tr>
-            <td>o3_sub_index</td>
-            <td>6</td>
-            <td>12</td>
-            <td>8</td>
-            <td>12</td>
-            <td>10</td>
-            <td>12</td>
-        </tr>
-        <tr>
-            <td>pm10_twenty_four_hourly</td>
-            <td>22</td>
-            <td>28</td>
-            <td>28</td>
-            <td>11</td>
-            <td>21</td>
-            <td>16</td>
-          </tr>
-          <tr>
-            <td>pm10_sub_index</td>
-            <td>22</td>
-            <td>28</td>
-            <td>28</td>
-            <td>11</td>
-            <td>21</td>
-            <td>16</td>
-          </tr>
-          <tr>
-            <td>co_sub_index</td>
-            <td>7</td>
-            <td>7</td>
-            <td>7</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-          </tr>
-          <tr>
-            <td>pm25_twenty_four_hourly</td>
-            <td>6</td>
-            <td>13</td>
-            <td>13</td>
-            <td>6</td>
-            <td>11</td>
-            <td>5</td>
-          </tr>
-          <tr>
-            <td>so2_sub_index</td>
-            <td>3</td>
-            <td>3</td>
-            <td>1</td>
-            <td>3</td>
-            <td>2</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td>co_eight_hour_max</td>
-            <td>0.75</td>
-            <td>0.75</td>
-            <td>0.72</td>
-            <td>0.37</td>
-            <td>0.47</td>
-            <td>0.58</td>
-          </tr>
-          <tr>
-            <td>no2_one_hour_max</td>
-            <td>24</td>
-            <td>85</td>
-            <td>85</td>
-            <td>25</td>
-            <td>12</td>
-            <td>31</td>
-          </tr>
-          <tr>
-            <td>so2_twenty_four_hourly</td>
-            <td>4</td>
-            <td>5</td>
-            <td>2</td>
-            <td>5</td>
-            <td>3</td>
-            <td>3</td>
-          </tr>
-          <tr>
-            <td>pm25_sub_index</td>
-            <td>26</td>
-            <td>52</td>
-            <td>52</td>
-            <td>25</td>
-            <td>45</td>
-            <td>20</td>
-          </tr>
-          <tr>
-            <td>psi_twenty_four_hourly</td>
-            <td>26</td>
-            <td>52</td>
-            <td>52</td>
-            <td>25</td>
-            <td>45</td>
-            <td>20</td>
-          </tr>
-          <tr>
-            <td>o3_eight_hour_max</td>
-            <td>14</td>
-            <td>29</td>
-            <td>19</td>
-            <td>28</td>
-            <td>24</td>
-            <td>29</td>
-          </tr>
-     
-    </body>
+<!DOCTYPE HTML>
+  <html>
+  <style>
+    table {
+      border: 1px solid black;
+      border-collapse: collapse;
+      background: #606060
+      text-align: center;
+      height: 40px;
+      vertical-align: middle;
+    }
+
+    th, td {
+      border: 1px solid #606060;
+      border-collapse: collapse;
+      text-align: center;
+      height: 40px;
+      vertical-align: middle;
+    }
+
+  </style>
+
+  <head>
+    <title> Pollutants Standards Index (PSI)</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="mystyle.css">
+  </head>
+
+  <body style="text-align:center;" id="body">
+    <h1 style="color:#606060;font-size:50px;"> PSI data from data.gov.sg </h1>
+    <h2 id="datetimetext" style='color:#606060; font-size:20px'>test</h2>
+    <div align="center" class="main" id="main"></div>
+  </body>
+
+<script>
+  var today = new Date();
+  datetimetext.innerText = "Last updated: "+ today.toLocaleString();
+
+  var myData;
+  fetch('https://api.data.gov.sg/v1/environment/psi')
+    .then(response=>response.json())
+    .then(data=>myData=data)
+    .then(()=>this.myFunction(myData));
+
+  function myFunction(data) {
+
+    var readings=data.items[0].readings;
+    var keys=Object.keys(readings)
+
+    var table = document.createElement("table");
+    document.getElementById('main').appendChild(table)
+
+    const areas=['national','north','south','east','west','central']
+    rowhead=table.insertRow()
+    rowhead.insertCell().innerHTML=' '
+    for (let i=0; i<6; i++){
+      rowhead.insertCell().innerHTML='<b>'+areas[i]+'</b>';
+    }
+
+    for (let j=0; j<12; j++){
+      row=table.insertRow();
+      row.insertCell().innerHTML=keys[j];
+      for (let i=0; i<6; i++){
+        value=readings[keys[j]][areas[i]]
+        row.insertCell().innerHTML='<i>'+value+'</i>';
+      }
+    }
+
+    console.log(table)
+  }
+
+</script>
+
+
+  </html>
